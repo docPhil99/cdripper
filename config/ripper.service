@@ -1,0 +1,10 @@
+[Unit]
+Description=Auto CD ripper
+
+[Service]
+Type=oneshot
+ExecStart=/home/phil/dev/rip.sh
+
+[Install]
+WantedBy=multi-user.target
+
