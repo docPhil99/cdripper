@@ -5,14 +5,22 @@
 #include <linux/cdrom.h>
 #include <fcntl.h>
 #include <iostream>
+#include <string.h>
 #include <unistd.h>
+#include <errno.h>
 using namespace std;
 
 int main(int argc,char **argv)
 {
     int cdrom=0;
     if ((cdrom = open(argv[1],O_RDONLY | O_NONBLOCK)) < 0) {
-        cout<<"Unable to open device. Provide a device name (/dev/sr0, /dev/cdrom) as a parameter."<<endl;
+        cout<<"Input command line provided:"<<endl;
+        for(int i=0;i<argc;i++)
+        {
+            cout<<argv[i]<<" ";
+        }
+        cout<<"Failed to open device with error: "<<strerror(errno)<<endl;
+        cout<<"Unable to open device. Provide a correct device name (/dev/sr0, /dev/cdrom) as a parameter."<<endl;
         exit(-1);
     }
 int result=ioctl(cdrom, CDROM_DRIVE_STATUS, 0);
