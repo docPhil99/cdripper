@@ -15,19 +15,34 @@ if mkdir $LOCKDIR; then
 	trap "cleanup" EXIT
 	echo "Acquired Lock, running" >> $LOGFILE
 	echo "Started $(date) $$" >> $LOGFILE
-        val=$(cdinfo/cdinfo /dev/sr0)
-        res=$?
+        pushd  "$(dirname "$0")"
+        echo "Setting cwd to $(pwd)" >> $LOGFILE
+        n=0
+        while [ $n -le 3 ]; do
+            val="$(cdinfo/cdinfo /dev/sr0)"
+            res=$?
+            echo "try: $n" >> $LOGFILE
+            echo "cdinfo output: $val" >> $LOGFILE
+            if [ $res -ne -1 ]; then
+                break
+            fi
+            let i = i + 1
+            sleep 4
+        done
         if [ $res -eq 4 ]; then
-	    abcde -c /home/phil/.abcde.conf >>$LOGFILE 2>&1
+	    abcde -c abcde.conf >>$LOGFILE 2>&1
             #trigger LMS rescan
             echo "Rescan library $(date) $$" >> $LOGFILE
             wget -q --spider http://localhost:9000/settings/index.html?p0=rescan
             echo "Done $(date)" >> $LOGFILE
             cat $LOGFILE | mail -s "Ripper log" dr.phil.birch@gmail.com
+            eject
+            #rm $LOGFILE
         else
-            echo "Disc error, not running abcde $(date) $val" >> $LOGFILE
+            echo "Disc error, not running abcde $(date) $val  $res" >> $LOGFILE
         fi    
 	echo "Stopped $(date) $$" >> $LOGFILE
+        popd
 else
 	echo "Could not create lock, already running? '$LOCKDIR'" 
         exit 1
