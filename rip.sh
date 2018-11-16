@@ -35,6 +35,8 @@ if mkdir $LOCKDIR; then
             echo "Rescan library $(date) $$" >> $LOGFILE
             wget -q --spider http://localhost:9000/settings/index.html?p0=rescan
             echo "Done $(date)" >> $LOGFILE
+            echo "Set backup flag to run">>$LOGFILE
+            /home/phil/dev/set_backup_flag.sh
             cat $LOGFILE | mail -s "Ripper log" dr.phil.birch@gmail.com
             eject
             #rm $LOGFILE
