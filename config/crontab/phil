@@ -23,6 +23,5 @@
 # For more information see the manual pages of crontab(5) and cron(8)
 # 
 SHELL=/bin/bash
-#MAILTO=dr.phil.birch@gmail.com
 # m h  dom mon dow   command
 0 3 * * * /home/phil/dev/check_backup_flag.sh && /home/phil/bin/rclone_jobber/backup_to_gdriv.sh
