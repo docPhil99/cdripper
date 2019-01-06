@@ -38,7 +38,8 @@ if mkdir $LOCKDIR; then
             echo "Set backup flag to run">>$LOGFILE
             /home/phil/dev/set_backup_flag.sh
             cat $LOGFILE | mail -s "Ripper log" dr.phil.birch@gmail.com
-            eject
+            #eject
+            /home/phil/dev/ifttt_done.sh &
             #rm $LOGFILE
         else
             echo "Disc error, not running abcde $(date) $val  $res" >> $LOGFILE
