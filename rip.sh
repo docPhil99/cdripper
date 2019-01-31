@@ -30,7 +30,7 @@ if mkdir $LOCKDIR; then
             sleep 4
         done
         if [ $res -eq 4 ]; then
-	    abcde -c abcde.conf >>$LOGFILE 2>&1
+	    abcde -c /home/phil/dev/abcde.conf >>$LOGFILE 2>&1
             #trigger LMS rescan
             echo "Rescan library $(date) $$" >> $LOGFILE
             wget -q --spider http://localhost:9000/settings/index.html?p0=rescan
