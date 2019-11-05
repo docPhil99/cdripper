@@ -1,7 +1,7 @@
 #!/bin/bash
 LOCKDIR=rip.lock
 LOGFILE=/home/phil/dev/log.txt
-rm $LOGFILE
+#rm $LOGFILE
 function cleanup {
  if rmdir $LOCKDIR; then
 	echo "Finished $(date)" >> $LOGFILE
@@ -46,6 +46,7 @@ if mkdir $LOCKDIR; then
             echo "Disc error, not running abcde $(date) $val  $res" >> $LOGFILE
         fi    
 	echo "Stopped $(date) $$" >> $LOGFILE
+        savelog -l -c 5 $LOGFILE
         popd
 else
 	echo "Could not create lock, already running? '$LOCKDIR'" 
