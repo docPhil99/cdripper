@@ -1,0 +1,9 @@
+[Unit]
+Description=Check for cd in drive at boot
+Before=ripper.service
+[Service]
+Type=oneshot
+ExecStart=/home/phil/dev/cd_boot.sh --probe
+
+[Install]
+WantedBy=multi-user.target

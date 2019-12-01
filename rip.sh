@@ -6,8 +6,10 @@ function cleanup {
  if rmdir $LOCKDIR; then
 	echo "Finished $(date)" >> $LOGFILE
         #rm $LOGFILE
+        popd
  else
 	echo "Failed to remove lock dir '$LOCKDIR'" >> $LOGFILE
+        popd
       	exit 1
  fi
 }
@@ -15,8 +17,21 @@ if mkdir $LOCKDIR; then
 	trap "cleanup" EXIT
 	echo "Acquired Lock, running" >> $LOGFILE
 	echo "Started $(date) $$" >> $LOGFILE
+
         pushd  "$(dirname "$0")"
         echo "Setting cwd to $(pwd)" >> $LOGFILE
+        val="$(cd_boot.sh --status)"
+        res=$?
+        echo "cd_at_boot: $val" >> $LOGFILE
+        echo "res=$res" >> $LOGFILE
+        if [ $res -eq 1 ]; then
+            echo "Boot lock detected, not running" >> $LOGFILE
+            echo "Clearing lock" >> $LOGFILE
+            val="$(cd_boot.sh --clear)"
+            res=$?
+            echo "$val" >> $LOGFILE
+            exit 0
+        fi
         n=0
         while [ $n -le 3 ]; do
             val="$(cdinfo/cdinfo /dev/sr0)"
@@ -47,7 +62,7 @@ if mkdir $LOCKDIR; then
         fi    
 	echo "Stopped $(date) $$" >> $LOGFILE
         savelog -l -c 5 $LOGFILE
-        popd
+        #popd
 else
 	echo "Could not create lock, already running? '$LOCKDIR'" 
         exit 1
