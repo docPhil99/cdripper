@@ -1,5 +1,5 @@
 #!/bin/bash
-LOCKDIR=rip.lock
+LOCKDIR=/var/lock/rip.lock
 LOGFILE=/home/phil/dev/log.txt
 #rm $LOGFILE
 function cleanup {
@@ -20,14 +20,14 @@ if mkdir $LOCKDIR; then
 
         pushd  "$(dirname "$0")"
         echo "Setting cwd to $(pwd)" >> $LOGFILE
-        val="$(cd_boot.sh --status)"
+        val="$(/home/phil/dev/cd_boot.sh --status)"
         res=$?
         echo "cd_at_boot: $val" >> $LOGFILE
         echo "res=$res" >> $LOGFILE
         if [ $res -eq 1 ]; then
             echo "Boot lock detected, not running" >> $LOGFILE
             echo "Clearing lock" >> $LOGFILE
-            val="$(cd_boot.sh --clear)"
+            val="$(/home/phil/dev/cd_boot.sh --clear)"
             res=$?
             echo "$val" >> $LOGFILE
             exit 0

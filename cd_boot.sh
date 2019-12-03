@@ -34,7 +34,7 @@ elif [[ "$1" != "--probe" ]]; then
     exit -1
 fi
 
-val="$(cdinfo/cdinfo /dev/sr0)"
+val="$(/home/phil/dev/cdinfo/cdinfo /dev/sr0)"
 res=$?
 echo "cdinfo output: $val"
 echo "exit status: $res"
